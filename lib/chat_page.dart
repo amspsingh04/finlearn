@@ -32,6 +32,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    if (userId == null) {
+      print("Error: User ID is null");
+    }
   }
 
   void _sendMessage() async {
@@ -61,6 +64,8 @@ class _ChatScreenState extends State<ChatScreen> {
         'timestamp': FieldValue.serverTimestamp(),
       });
     } catch (e) {
+      print("Error while getting response from chatbot: $e");
+
       // Handle errors gracefully
       final errorResponse = 'Error: Unable to get response';
 
@@ -83,16 +88,25 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: <Widget>[
           // StreamBuilder to load chat messages from Firestore
-          Expanded(
+        Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: _firestore
                   .collection('chat_messages')
                   .where('userId', isEqualTo: userId) // Filter by userId
-                  .orderBy('timestamp', descending: false)
                   .snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
+                // Check for loading state
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
+                }
+
+                // Check for any errors
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return Center(child: Text('No messages yet.'));
                 }
 
                 final messages = snapshot.data!.docs.map((doc) {
@@ -100,8 +114,16 @@ class _ChatScreenState extends State<ChatScreen> {
                   return {
                     'role': data['role'] ?? '',
                     'content': data['content'] ?? '',
+                    'timestamp': data['timestamp'] ?? Timestamp.now(), // Use Timestamp here
                   };
                 }).toList();
+
+                // Sort messages by timestamp locally after fetching
+                messages.sort((a, b) {
+                  final timestampA = a['timestamp'] as Timestamp;
+                  final timestampB = b['timestamp'] as Timestamp;
+                  return timestampA.compareTo(timestampB);
+                });
 
                 return ListView.builder(
                   itemCount: messages.length,
@@ -109,18 +131,23 @@ class _ChatScreenState extends State<ChatScreen> {
                     final message = messages[index];
                     final isUser = message['role'] == 'user';
 
-                    return Align(
-                      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: isUser ? Colors.blue[100] : Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          message['content']!,
-                          style: TextStyle(color: isUser ? Colors.black : Colors.black87),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                      child: Align(
+                        alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          decoration: BoxDecoration(
+                            color: isUser ? Colors.blue[100] : Colors.grey[300],
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Text(
+                            message['content']!,
+                            style: TextStyle(
+                              color: isUser ? Colors.black : Colors.black87,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       ),
                     );
@@ -129,7 +156,7 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
-          Padding(
+        Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: <Widget>[
