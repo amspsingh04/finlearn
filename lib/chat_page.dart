@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'chat_service.dart';
 
 void main() => runApp(MyApp());
@@ -27,14 +28,23 @@ class _ChatScreenState extends State<ChatScreen> {
   final ChatService _chatService = ChatService();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Fetch the current user's ID
+  String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void _sendMessage() async {
     final message = _controller.text.trim();
-    if (message.isEmpty) return;
+    if (message.isEmpty || userId == null) return;
 
-    // Add user message to Firestore
+    // Add user message to Firestore with userId
     await _firestore.collection('chat_messages').add({
       'role': 'user',
       'content': message,
+      'userId': userId,  // Store the userId
       'timestamp': FieldValue.serverTimestamp(),
     });
 
@@ -44,10 +54,11 @@ class _ChatScreenState extends State<ChatScreen> {
       // Send the message to the chatbot service
       final response = await _chatService.sendMessage(message);
 
-      // Add bot response to Firestore
+      // Add bot response to Firestore with userId
       await _firestore.collection('chat_messages').add({
         'role': 'bot',
         'content': response,
+        'userId': userId,  // Store the same userId
         'timestamp': FieldValue.serverTimestamp(),
       });
     } catch (e) {
@@ -55,6 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
       await _firestore.collection('chat_messages').add({
         'role': 'bot',
         'content': 'Error: Unable to get response',
+        'userId': userId,  // Store the same userId
         'timestamp': FieldValue.serverTimestamp(),
       });
     }
@@ -73,6 +85,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: StreamBuilder<QuerySnapshot>(
               stream: _firestore
                   .collection('chat_messages')
+                  .where('userId', isEqualTo: userId)  // Filter by userId
                   .orderBy('timestamp', descending: false)
                   .snapshots(),
               builder: (context, snapshot) {
