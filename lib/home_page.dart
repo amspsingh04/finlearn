@@ -70,11 +70,13 @@ class _HomePageState extends State<HomePage> {
               leading: const Icon(Icons.account_circle),
               title: const Text('Profile'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()),
-                );
-                Navigator.pop(context);  // Close the drawer
+                Navigator.pop(context);  // Close the drawer first
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProfilePage()),
+                  );
+                });
               },
             ),
             ListTile(
