@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   // List of pages corresponding to each bottom nav button
   final List<Widget> _pages = [
     LearnPage(),      // The Learn page
-    ChatPage(),       // The Chat page
+    ChatScreen(),       // The Chat page
     ResourcesPage(),  // The Resources page
   ];
 
