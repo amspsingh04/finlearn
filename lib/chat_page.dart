@@ -1,42 +1,63 @@
 import 'package:flutter/material.dart';
-import 'responses.dart'; // Import the file for handling responses from Ollama.
+import 'chat_service.dart';
 
-class ChatPage extends StatefulWidget {
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
   @override
-  _ChatPageState createState() => _ChatPageState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Chatbot',
+      home: ChatScreen(),
+    );
+  }
 }
 
-class _ChatPageState extends State<ChatPage> {
+class ChatScreen extends StatefulWidget {
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  List<String> messages = [];
-  
+  final ChatService _chatService = ChatService();
+  List<String> _messages = [];
+
   void _sendMessage() async {
-    String userMessage = _controller.text.trim();
-    if (userMessage.isEmpty) return;
-    
+    final message = _controller.text;
+    if (message.isEmpty) return;
+
     setState(() {
-      messages.add("You: $userMessage");
-      _controller.clear();
+      _messages.add('You: $message');
     });
 
-    String assistantResponse = await getChatResponse(userMessage); // Call function to get Ollama's response
-    setState(() {
-      messages.add("Assistant: $assistantResponse");
-    });
+    try {
+      // Send the message and get the response
+      final response = await _chatService.sendMessage(message);
+      setState(() {
+        _messages.add('Bot: $response');
+      });
+    } catch (e) {
+      setState(() {
+        _messages.add('Error: Unable to get response');
+      });
+    }
+
+    _controller.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      appBar: AppBar(title: Text("Chatbot")),
       body: Column(
         children: <Widget>[
           Expanded(
             child: ListView.builder(
-              itemCount: messages.length,
+              itemCount: _messages.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(messages[index]),
+                  title: Text(_messages[index]),
                 );
               },
             ),
@@ -48,7 +69,7 @@ class _ChatPageState extends State<ChatPage> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    decoration: InputDecoration(hintText: 'Type your message...'),
+                    decoration: InputDecoration(hintText: "Type a message"),
                   ),
                 ),
                 IconButton(
