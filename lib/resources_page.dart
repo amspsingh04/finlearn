@@ -1,14 +1,16 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: ResourcesPage(),
   ));
 }
 
 class ResourcesPage extends StatelessWidget {
-  const ResourcesPage({Key? key}) : super(key: key);
+  const ResourcesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class ResourcesPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PortfolioManagerPage()),
+                  MaterialPageRoute(builder: (context) => const PortfolioManagerPage()),
                 );
               },
               child: Card(
@@ -39,7 +41,7 @@ class ResourcesPage extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   height: 200,
                   width: double.infinity,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(
@@ -47,7 +49,7 @@ class ResourcesPage extends StatelessWidget {
                         color: Colors.white,
                         size: 40,
                       ),
-                      const SizedBox(width: 20),
+                      SizedBox(width: 20),
                       Text(
                         'Portfolio Manager',
                         style: TextStyle(
@@ -67,7 +69,7 @@ class ResourcesPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BudgetCalculatorPage()),
+                  MaterialPageRoute(builder: (context) => const BudgetCalculatorPage()),
                 );
               },
               child: Card(
@@ -88,7 +90,7 @@ class ResourcesPage extends StatelessWidget {
                         color: Colors.white,
                         size: 40,
                       ),
-                      const SizedBox(width: 30),
+                      SizedBox(width: 30),
                       Text(
                         'Budget Calculator',
                         style: TextStyle(
@@ -115,7 +117,7 @@ class StockData {
 }
 
 class PortfolioManagerPage extends StatelessWidget {
-  const PortfolioManagerPage({Key? key}) : super(key: key);
+  const PortfolioManagerPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -168,15 +170,15 @@ class PortfolioManagerPage extends StatelessWidget {
               children: [
                 ListTile(
                   title: Text(stockName as String), // Casting to String
-                  subtitle: Text('Price: \$${stockPrice}'),
+                  subtitle: Text('Price: \$$stockPrice'),
                   trailing: Text(
                       'Total: \$${(item['quantity'] as num).toDouble() * (item['price'] as double)}'),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SfCartesianChart(
-                    primaryXAxis: DateTimeCategoryAxis(),
-                    primaryYAxis: NumericAxis(),
+                    primaryXAxis: const DateTimeCategoryAxis(),
+                    primaryYAxis: const NumericAxis(),
                     series: <CartesianSeries<StockData, DateTime>>[
                       LineSeries<StockData, DateTime>(
                         dataSource: stockTimeSeriesData!,
@@ -195,7 +197,7 @@ class PortfolioManagerPage extends StatelessWidget {
   }
 }
 class BudgetCalculatorPage extends StatefulWidget {
-  const BudgetCalculatorPage({Key? key}) : super(key: key);
+  const BudgetCalculatorPage({super.key});
 
   @override
   _BudgetCalculatorPageState createState() => _BudgetCalculatorPageState();
@@ -247,7 +249,7 @@ class _BudgetCalculatorPageState extends State<BudgetCalculatorPage> {
                             child: TextFormField(
                               initialValue: budgetData[category]!.toString(),
                               keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Amount',
                                 border: OutlineInputBorder(),
                               ),
@@ -274,20 +276,20 @@ class _BudgetCalculatorPageState extends State<BudgetCalculatorPage> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 'Total Budget: \$${totalBudget.toStringAsFixed(2)}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             // Pie chart showing the budget breakdown
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: SfCircularChart(
-                legend: Legend(isVisible: true),
+                legend: const Legend(isVisible: true),
                 series: <CircularSeries>[
                   PieSeries<PieChartData, String>(
                     dataSource: pieData,
                     xValueMapper: (PieChartData data, _) => data.category,
                     yValueMapper: (PieChartData data, _) => data.amount,
-                    dataLabelSettings: DataLabelSettings(isVisible: true),
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
                   ),
                 ],
               ),

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart'; // Import the login page to navigate after logout
@@ -9,21 +11,25 @@ import 'resources_page.dart';
 import 'profile_page.dart'; // Import the ProfilePage
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(), // Default to light theme
-      home: HomePage(), // No night mode parameters needed
+      home: const HomePage(), // No night mode parameters needed
     );
   }
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -33,9 +39,9 @@ class _HomePageState extends State<HomePage> {
   
   // List of pages corresponding to each bottom nav button
   final List<Widget> _pages = [
-    LearnPage(),      // The Learn page
-    ChatScreen(),       // The Chat page
-    ResourcesPage(),  // The Resources page
+    //LearnPage(),      // The Learn page
+    const ChatScreen(),       // The Chat page
+    const ResourcesPage(),  // The Resources page
   ];
 
   void _onItemTapped(int index) {
@@ -80,14 +86,14 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.logout),
+              leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () async {
                 await FirebaseAuth.instance.signOut(); // Log out the user
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginPage(), // Navigate to login page
+                    builder: (context) => const LoginPage(), // Navigate to login page
                   ),
                 );
               },

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'login.dart'; // Import the login page
@@ -16,14 +18,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _isNightMode = false; // Night mode state
+  final bool _isNightMode = false; // Night mode state
 
   // Toggle night mode
-  void _toggleNightMode(bool value) {
-    setState(() {
-      _isNightMode = value;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +33,7 @@ class _MyAppState extends State<MyApp> {
           : ThemeData.light().copyWith(
               colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 143, 79, 255)),
             ),
-      home: LoginPage(),
+      home: const LoginPage(),
     );
   }
 }

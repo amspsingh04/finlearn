@@ -1,11 +1,15 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'chat_service.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,12 +17,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChatScreen(),
+      home: const ChatScreen(),
     );
   }
 }
 
 class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -67,7 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
       print("Error while getting response from chatbot: $e");
 
       // Handle errors gracefully
-      final errorResponse = 'Error: Unable to get response';
+      const errorResponse = 'Error: Unable to get response';
 
       // Save error message to Firestore
       await _firestore.collection('chat_messages').add({
@@ -83,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chatbot"),
+        title: const Text("Chatbot"),
       ),
       body: Column(
         children: <Widget>[
@@ -97,7 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
               builder: (context, snapshot) {
                 // Check for loading state
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 // Check for any errors
@@ -106,7 +112,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
 
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text('No messages yet.'));
+                  return const Center(child: Text('No messages yet.'));
                 }
 
                 final messages = snapshot.data!.docs.map((doc) {
@@ -136,7 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: Align(
                         alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                           decoration: BoxDecoration(
                             color: isUser ? Colors.blue[100] : Colors.grey[300],
                             borderRadius: BorderRadius.circular(15),
@@ -163,15 +169,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Type a message",
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: _sendMessage,
                   color: Colors.blue,
                 ),
