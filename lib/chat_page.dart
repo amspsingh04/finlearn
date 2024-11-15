@@ -27,8 +27,6 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final ChatService _chatService = ChatService();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  // Fetch the current user's ID
   String? userId = FirebaseAuth.instance.currentUser?.uid;
 
   @override
@@ -40,33 +38,37 @@ class _ChatScreenState extends State<ChatScreen> {
     final message = _controller.text.trim();
     if (message.isEmpty || userId == null) return;
 
-    // Add user message to Firestore with userId
+    // Add user message to Firestore
     await _firestore.collection('chat_messages').add({
       'role': 'user',
       'content': message,
-      'userId': userId,  // Store the userId
+      'userId': userId,
       'timestamp': FieldValue.serverTimestamp(),
     });
 
+    // Clear the input field
     _controller.clear();
 
     try {
       // Send the message to the chatbot service
       final response = await _chatService.sendMessage(message);
 
-      // Add bot response to Firestore with userId
+      // Add bot response to Firestore
       await _firestore.collection('chat_messages').add({
         'role': 'bot',
         'content': response,
-        'userId': userId,  // Store the same userId
+        'userId': userId,
         'timestamp': FieldValue.serverTimestamp(),
       });
     } catch (e) {
       // Handle errors gracefully
+      final errorResponse = 'Error: Unable to get response';
+
+      // Save error message to Firestore
       await _firestore.collection('chat_messages').add({
         'role': 'bot',
-        'content': 'Error: Unable to get response',
-        'userId': userId,  // Store the same userId
+        'content': errorResponse,
+        'userId': userId,
         'timestamp': FieldValue.serverTimestamp(),
       });
     }
@@ -85,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: StreamBuilder<QuerySnapshot>(
               stream: _firestore
                   .collection('chat_messages')
-                  .where('userId', isEqualTo: userId)  // Filter by userId
+                  .where('userId', isEqualTo: userId) // Filter by userId
                   .orderBy('timestamp', descending: false)
                   .snapshots(),
               builder: (context, snapshot) {
