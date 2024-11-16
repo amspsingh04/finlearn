@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   
   // List of pages corresponding to each bottom nav button
   final List<Widget> _pages = [
-    //LearnPage(),      // The Learn page
+    const LearnPage(email:  'Shourya@gmail'),      // The Learn page
     const ChatScreen(),       // The Chat page
     const ResourcesPage(),  // The Resources page
   ];
