@@ -29,7 +29,7 @@ class LearnPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hi $username',
+              'Hi $username!',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
@@ -49,7 +49,7 @@ class LearnPage extends StatelessWidget {
                       subtitle: Text('Progress: ${course['progress']}%'),
                       trailing: SizedBox(
                         width: 50,
-                        height: 50,
+                        height: 250,
                         child: CircularProgressIndicator(
                           value: (course['progress'] as double) / 100,
                           backgroundColor: Colors.grey[200],

@@ -12,18 +12,18 @@ class CourseDetailPage extends StatelessWidget {
   final videos = [
     {
       'title': 'Introduction to Finance',
-      'thumbnailUrl': 'https://img.youtube.com/vi/dummy1/0.jpg',
-      'videoUrl': 'https://www.youtube.com/watch?v=dummy1',
+      'thumbnailUrl': 'lib/vid1.jpg',
+      'videoUrl': ' https://www.youtube.com/watch?v=jwx92POes_Q',
     },
     {
       'title': 'Understanding Budgeting Basics',
-      'thumbnailUrl': 'https://img.youtube.com/vi/dummy2/0.jpg',
-      'videoUrl': 'https://www.youtube.com/watch?v=dummy2',
+      'thumbnailUrl': 'lib/vid2.jpg',
+      'videoUrl': 'https://youtu.be/sVKQn2I4HDM?si=WJDzQhWCtL424zVk',
     },
     {
       'title': 'Saving Strategies for Beginners',
-      'thumbnailUrl': 'https://img.youtube.com/vi/dummy3/0.jpg',
-      'videoUrl': 'https://www.youtube.com/watch?v=dummy3',
+      'thumbnailUrl': 'lib/vid3.jpg',
+      'videoUrl': 'https://youtu.be/HQzoZfc3GwQ?si=ECodnpPI2cukJsVe',
     },
   ];
 
