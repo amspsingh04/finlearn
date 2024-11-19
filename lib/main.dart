@@ -12,19 +12,20 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
+  
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   final bool _isNightMode = false; // Night mode state
-
+  
   // Toggle night mode
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Quiz App',
       theme: _isNightMode
           ? ThemeData.dark().copyWith(

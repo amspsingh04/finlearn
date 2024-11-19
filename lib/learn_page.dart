@@ -16,9 +16,9 @@ class LearnPage extends StatelessWidget {
 
     // Dummy course data
     final courses = [
-      {'title': 'Course 1: Introduction', 'progress': 40.0},
-      {'title': 'Course 2: Budgeting', 'progress': 70.0},
-      {'title': 'Course 3: Savings', 'progress': 30.0},
+      {'title': 'Course 1: Introduction', 'progress': 5.0},
+      {'title': 'Course 2: Budgeting', 'progress': 5.0},
+      {'title': 'Course 3: Savings', 'progress': 5.0},
     ];
 
     return Scaffold(
@@ -29,7 +29,7 @@ class LearnPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hi $username!',
+              'Hi user!',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
