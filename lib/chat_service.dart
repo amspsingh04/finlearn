@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class ChatService {
   // Base URL of the Flask server exposed via Ngrok
-  final String baseUrl = "https://6d1e-2401-4900-234e-5324-d956-4a34-e251-54c1.ngrok-free.app/";
+  final String baseUrl = "http://10.0.2.2:11434/api/chat/";
 
   // Send a message to the Llama3 model
   Future<String> sendMessage(String message) async {
